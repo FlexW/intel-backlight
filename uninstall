@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-sudo rm /etc/sudoers.d/sudo-intel-backlight
