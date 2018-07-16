@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+# /sys/class/backlight/intel_backlight/max_brightness
+# /sys/class/backlight/intel_backlight/brightness
+
+directory="/sys/class/backlight/intel_backlight/"
+max_brightness=$(sudo cat $directory"max_brightness")
+actual_brightness=$(sudo cat $directory"actual_brightness")
+
+function print_help () {
+    echo $1 "Felix Weilbach" "2018"
+    echo ""
+    echo "Available Options:"
+    echo "-i <percentage>" "Increase brightness by percentage."
+    echo "-d <percentage>" "Decrease brightness by percentage."
+    echo "-g" "Get brightness in percentage."
+    echo "-h" "Print this help."
+}
+
+function percentage_to_absolut () {
+    let "absolut = $max_brightness / 100 * $1"
+    echo $absolut
+}
+
+function absolut_to_percentage () {
+    let "percentage = $1 * 100 / $max_brightness"
+    echo $percentage
+}
+
+function set_brightness () {
+    if [ "$1" -lt "50" ]; then
+        level="50"
+    elif [ "$1" -gt "$max_brightness" ]; then
+        level=$max_brightness
+    elif [ "$1" -le "$max_brightness" ]; then
+        level=$1
+    else
+        level=$actual_brightness
+    fi
+    echo $level | sudo tee $directory"brightness" > /dev/null
+}
+
+function inc_brightness () {
+    let "level = $actual_brightness + $(percentage_to_absolut $1)"
+    set_brightness $level
+}
+
+function dec_brightness () {
+    let "level = $actual_brightness - $(percentage_to_absolut $1)"
+    set_brightness $level
+}
+
+while getopts "i:d:gh" opt; do
+    case ${opt} in
+        i) inc_brightness $OPTARG
+           ;;
+        d) dec_brightness $OPTARG
+           ;;
+        g) absolut_to_percentage $actual_brightness
+           ;;
+        h) print_help $0
+           ;;
+        \?) print_help $0
+           ;;
+    esac
+done
