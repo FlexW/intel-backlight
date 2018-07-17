@@ -1,11 +1,12 @@
+# install for user with: nix-env -f default.nix -i intel-backlight
 with import <nixpkgs> {};
 
 stdenv.mkDerivation {
   name = "intel-backlight";
 
   src = fetchurl {
-    url = "https://gitlab.com/flexw/intel-backlight/-/archive/master/intel-backlight-master.tar.gz";
-    sha256 = "5a8656c0b0c8702c7f54e9ca8af14a8247f3456a008468395b827fd8eb58bf6e";
+    url = "https://gitlab.com/flexw/intel-backlight/-/archive/version-0.1/intel-backlight-version-0.1.tar.gz";
+    sha256 = "85a050ee9d8d6a93da3901f0bb78f8e82c63181bc33b19b9b37a52d34746fdc1";
   };
 
   installPhase = ''
