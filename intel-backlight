@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
+version="0.1"
+
 directory="/sys/class/backlight/intel_backlight/"
 max_brightness=$(sudo cat $directory"max_brightness")
 actual_brightness=$(sudo cat $directory"actual_brightness")
 
 function print_help () {
-    echo $1 "Felix Weilbach" "2018"
-    echo ""
-    echo "Available Options:"
+    echo $0, "version "$version
+    echo "Usage:" $0 "[option]"
+    echo "Options:"
     echo "-i <percentage>" "Increase brightness by percentage."
     echo "-d <percentage>" "Decrease brightness by percentage."
     echo "-g" "Get brightness in percentage."
@@ -15,9 +17,9 @@ function print_help () {
     echo ""
     echo "To run this script without sudo you may need to add this lines to visudo:"
     echo ""
-    echo "ALL ALL = (ALL) NOPASSWD: /usr/bintee /sys/class/backlight/intel_backlight/brightness"
-    echo "ALL ALL = (ALL) NOPASSWD: /usr/bin/cat /sys/class/backlight/intel_backlight/max_brightness"
-    echo "ALL ALL = (ALL) NOPASSWD: /usr/bin/cat /sys/class/backlight/intel_backlight/actual_brightness"
+    echo "ALL ALL = (ALL) NOPASSWD: /path/to/tee /sys/class/backlight/intel_backlight/brightness"
+    echo "ALL ALL = (ALL) NOPASSWD: /path/to/cat /sys/class/backlight/intel_backlight/max_brightness"
+    echo "ALL ALL = (ALL) NOPASSWD: /path/to/cat /sys/class/backlight/intel_backlight/actual_brightness"
 }
 
 function percentage_to_absolut () {
